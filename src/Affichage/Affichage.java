@@ -15,13 +15,13 @@ import com.fasterxml.jackson.databind.*;
 
 public class Affichage extends JPanel implements Runnable
 {
-    int[][] Niveau = new int[22][39];
+    public int[][] Niveau = new int[22][39];
     private Personnage perso;
     private static ImageIcon PersoAv,PersoAr,Ciel,Sol;
     private JFrame fenetre = new JFrame("test");
     Thread AffichageThread;
     private long dernierTemps;
-    private Objet[][] NiveauObj = new Objet[22][39];
+    public static Objet[][] NiveauObj = new Objet[22][39];
     private static int temp = 0;
     public Affichage()
     {

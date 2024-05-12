@@ -124,6 +124,7 @@ public class Inputs
 
                 if(e.getKeyCode() == KeyEvent.VK_A)
                 {
+                    KeyA = false;
                     if (!KeyD)
                     {
                         Direction = 0;
