@@ -224,13 +224,13 @@ public class Personnage extends Objet
     private void colisionY()
     {
         int tempY = getY()+(int) this.vitesseY;
-        if(tempY >= 400)
+        if(tempY >= 900)
         {
             if(!(this.vitesseY == 0 && this.etat == etatPerso.Dashing))
             {
                 this.colisionY = colision.BAS;
             }
-            setLocation(getX(),400);
+            setLocation(getX(),900);
             if(this.etat != etatPerso.Dashing && this.etat != etatPerso.Waving)
             {
                 this.etat = etatPerso.OnGround;

@@ -9,16 +9,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import com.fasterxml.jackson.databind.*;
 
 public class Affichage extends JPanel implements Runnable
 {
+    int[][] Niveau = new int[22][39];
     private Personnage perso;
-    private static ImageIcon PersoAv,PersoAr,Ciel;
+    private static ImageIcon PersoAv,PersoAr,Ciel,Sol;
     private JFrame fenetre = new JFrame("test");
     Thread AffichageThread;
     private long dernierTemps;
-    private Objet[][] Niveau = new Objet[39][22];
+    private Objet[][] NiveauObj = new Objet[22][39];
     private static int temp = 0;
     public Affichage()
     {
@@ -51,9 +54,18 @@ public class Affichage extends JPanel implements Runnable
         {
             System.out.println(e.getCause());
         }
+        try
+        {
+            BufferedImage sprite1 = ImageIO.read(new File("Ressources/sol.png"));
+            Sol = new ImageIcon(sprite1);
+        }
+        catch (IOException e)
+        {
+            System.out.println(e.getCause());
+        }
         //Fenetre setup
         fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        fenetre.setSize(1920,1080);
+        fenetre.setSize(1920,1000);
         fenetre.setLocation(0,0);
         //Inputs
         int temp = Inputs.GestionInputs(fenetre);
@@ -89,30 +101,48 @@ public class Affichage extends JPanel implements Runnable
                 dernierTemps = maintenant;
                 Component[] components = fenetre.getContentPane().getComponents();
                 int a = 0;
+                perso.setSize(50,50);
             }
         }
     }
 
     void CreationNiveau()
     {
-        for(int idx = 0;idx <= 38;idx++)
+        ObjectMapper mapper = new ObjectMapper();
+        // Lecture du fichier JSON et conversion en tableau d'entiers bidimensionnel
+        try
         {
-            for(int idx1 = 0;idx1<= 21;idx1++)
+            Niveau = mapper.readValue(new File("test.json"), int[][].class);
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+        for(int idx = 0;idx <= 21;idx++)
+        {
+            for(int idx1 = 0;idx1<= 38;idx1++)
             {
-                Niveau[idx][idx1] = new Objet(Ciel,0,0,true);
-                fenetre.add(Niveau[idx][idx1]);
+
+                if(Niveau[idx][idx1] == 1)
+                {
+                    NiveauObj[idx][idx1] = new Objet(Sol,0,0,true);
+                }
+                else
+                {
+                    NiveauObj[idx][idx1] = new Objet(Ciel,0,0,false);
+                }
+                fenetre.add(NiveauObj[idx][idx1]);
             }
         }
     }
 
     void AffichageNiveau()
     {
-        temp++;
-        for(int idx = 0;idx <= 38;idx++)
+        for(int idx = 0;idx <= 21;idx++)
         {
-            for(int idx1 = 0;idx1<= 21;idx1++)
+            for(int idx1 = 0;idx1<= 38;idx1++)
             {
-                Niveau[idx][idx1].setLocation(50*idx,50*idx1);
+                NiveauObj[idx][idx1].setLocation(50*idx1,50*idx);
             }
         }
     }
