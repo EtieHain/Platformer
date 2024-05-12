@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class Inputs implements Runnable
+public class Inputs
 {
     public static int Direction;
     public static boolean KeyW = false,KeyS = false,KeyA = false,KeyD = false,KeySpace = false,KeyI = false;
@@ -101,10 +101,24 @@ public class Inputs implements Runnable
                     }
                     if(KeyW)
                     {
-                        Direction = 1;
+                        if(KeyA)
+                        {
+                            Direction = 8;
+                        }
+                        else
+                        {
+                            Direction = 1;
+                        }
                     } else if (KeyS)
                     {
-                        Direction = 5;
+                        if(KeyA)
+                        {
+                            Direction = 6;
+                        }
+                        else
+                        {
+                            Direction = 5;
+                        }
                     }
                 }
 
@@ -114,13 +128,26 @@ public class Inputs implements Runnable
                     {
                         Direction = 0;
                     }
-                    KeyA = false;
                     if(KeyW)
                     {
-                        Direction = 1;
+                        if(KeyD)
+                        {
+                            Direction = 2;
+                        }
+                        else
+                        {
+                            Direction = 1;
+                        }
                     } else if (KeyS)
                     {
-                        Direction = 5;
+                        if(KeyD)
+                        {
+                            Direction = 4;
+                        }
+                        else
+                        {
+                            Direction = 5;
+                        }
                     }
                 }
                 if(e.getKeyCode() == KeyEvent.VK_W)
@@ -161,8 +188,4 @@ public class Inputs implements Runnable
         return Direction;
     }
 
-    @Override
-    public void run() {
-
-    }
 }
