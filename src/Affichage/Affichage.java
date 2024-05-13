@@ -74,6 +74,7 @@ public class Affichage extends JPanel implements Runnable
         dernierTemps = System.nanoTime();
         AffichageThread = new Thread(this);
         fenetre.setVisible(true);
+        perso.setLocation(1000,400);
         AffichageThread.start();
     }
 
@@ -82,6 +83,7 @@ public class Affichage extends JPanel implements Runnable
     public void run()
     {
         CreationNiveau();
+        perso.setLocation(50,700);
         while (AffichageThread!= null)
         {
             long maintenant = System.nanoTime();
