@@ -141,11 +141,11 @@ public class Personnage extends Objet
         int Direction = Inputs.Direction;
         if(2 <= Direction && Direction <= 4)
         {
-            return 10d;
+            return 1d;
         }
         else if(6 <= Direction)
         {
-            return -10d;
+            return -1d;
         } else
         {
             return 0d;
@@ -190,24 +190,20 @@ public class Personnage extends Objet
     }
     private void ColisionX()
     {
-        int tempX = getX()+(int) this.vitesseX;
-        int tempY = getY();
-        int posX = getX();
-        int posY = getY();
-        int posTabX = posX / 50;
-        int posTabY = posY / 50;
+        int tempX = this.positionX+(int) this.vitesseX;
+        int posTabX = getX() / 50;
+        int posTabY = this.positionY / 50;
         //Test Colision axe X
-
         //Test colision gauche
         if(vitesseX < 0)
         {
             if(posTabX != 0)
             {
-                if(tempY % 50 == 0) // si le perso est parfaitement alligné à une ligne
+                if(positionY % 50 == 0) // si le perso est parfaitement alligné à une ligne
                 {
-                    if(Affichage.NiveauObj[posTabY][posTabX-1].colision && tempX <= posTabX * 50) //si il y a une colision détectée
+                    if(Affichage.NiveauObj[posTabY][posTabX-1].colision && getX()+vitesseX <= ((posTabX)  * 50) - Affichage.Offset) //si il y a une colision détectée
                     {
-                        posX = posTabX * 50;
+                        positionX = posTabX * 50;
                         this.colisionX = etatColision.GAUCHE;
                         if(this.vitesseY > 0)
                         {
@@ -216,7 +212,7 @@ public class Personnage extends Objet
                     }
                     else // Si aucune colision est trouvée
                     {
-                        posX = tempX;
+                        positionX = tempX;
                         this.colisionX = etatColision.AUCUN;
                         if(this.etat != etatPerso.Dashing && this.etat != etatPerso.Waving && this.etat != etatPerso.WaveDashing && this.etat != etatPerso.WallJumping)
                         {
@@ -226,9 +222,9 @@ public class Personnage extends Objet
                 }
                 else//Si le perso est sur deux lignes
                 {
-                    if((Affichage.NiveauObj[posTabY][posTabX-1].colision || Affichage.NiveauObj[posTabY + 1][posTabX-1].colision) && tempX <= posTabX * 50) //si il y a une colision détectée
+                    if((Affichage.NiveauObj[posTabY][posTabX-1].colision || Affichage.NiveauObj[posTabY + 1][posTabX-1].colision) && tempX <= (posTabX % 50) + Affichage.Offset) //si il y a une colision détectée
                     {
-                        posX = posTabX * 50;
+                        positionX = posTabX * 50;
                         this.colisionX = etatColision.GAUCHE;
                         if(this.vitesseY > 0)
                         {
@@ -237,7 +233,7 @@ public class Personnage extends Objet
                     }
                     else // Si aucune colision est trouvée
                     {
-                        posX = tempX;
+                        positionX = tempX;
                         this.colisionX = etatColision.AUCUN;
                         if(this.etat != etatPerso.Dashing && this.etat != etatPerso.Waving && this.etat != etatPerso.WaveDashing && this.etat != etatPerso.WallJumping)
                         {
@@ -248,13 +244,13 @@ public class Personnage extends Objet
             }
         } else if (vitesseX > 0) // test colision droite
         {
-            if(tempY % 50 == 0) // si le perso est parfaitement alligné à une ligne
+            if(positionY % 50 == 0) // si le perso est parfaitement alligné à une ligne
             {
-                if(posX % 50 == 0) //Si le perso est pafaitement aligné a une colone
+                if(positionX % 50 == 0) //Si le perso est pafaitement aligné a une colone
                 {
                     if(Affichage.NiveauObj[posTabY][posTabX+1].colision && tempX >= posTabX * 50) //si il y a une colision détectée
                     {
-                        posX = posTabX * 50;
+                        positionX = posTabX * 50;
                         this.colisionX = etatColision.DROITE;
                         if(this.vitesseY > 0)
                         {
@@ -263,7 +259,7 @@ public class Personnage extends Objet
                     }
                     else // Si aucune colision est trouvée
                     {
-                        posX = tempX;
+                        positionX = tempX;
                         this.colisionX = etatColision.AUCUN;
                         if(this.etat != etatPerso.Dashing && this.etat != etatPerso.Waving && this.etat != etatPerso.WaveDashing && this.etat != etatPerso.WallJumping)
                         {
@@ -275,7 +271,7 @@ public class Personnage extends Objet
                 {
                     if(Affichage.NiveauObj[posTabY][posTabX+2].colision && tempX >= (posTabX +1)* 50) //si il y a une colision détectée
                     {
-                        posX = (posTabX+1) * 50;
+                        positionX = (posTabX+1) * 50;
                         this.colisionX = etatColision.DROITE;
                         if(this.vitesseY > 0)
                         {
@@ -284,7 +280,7 @@ public class Personnage extends Objet
                     }
                     else // Si aucune colision est trouvée
                     {
-                        posX = tempX;
+                        positionX = tempX;
                         this.colisionX = etatColision.AUCUN;
                         if(this.etat != etatPerso.Dashing && this.etat != etatPerso.Waving && this.etat != etatPerso.WaveDashing && this.etat != etatPerso.WallJumping)
                         {
@@ -295,11 +291,11 @@ public class Personnage extends Objet
             }
             else//Si le perso est sur deux lignes
             {
-                if(posX % 50 == 0)
+                if(positionX % 50 == 0)
                 {
                     if((Affichage.NiveauObj[posTabY][posTabX+1].colision || Affichage.NiveauObj[posTabY + 1][posTabX+1].colision)&& tempX >= posTabX* 50) //si il y a une colision détectée
                     {
-                        posX = posTabX * 50;
+                        positionX = posTabX * 50;
                         this.colisionX = etatColision.DROITE;
                         if(this.vitesseY > 0)
                         {
@@ -308,7 +304,7 @@ public class Personnage extends Objet
                     }
                     else // Si aucune colision est trouvée
                     {
-                        posX = tempX;
+                        positionX = tempX;
                         this.colisionX = etatColision.AUCUN;
                         if(this.etat != etatPerso.Dashing && this.etat != etatPerso.Waving && this.etat != etatPerso.WaveDashing && this.etat != etatPerso.WallJumping)
                         {
@@ -320,7 +316,7 @@ public class Personnage extends Objet
                 {
                     if((Affichage.NiveauObj[posTabY][posTabX+2].colision || Affichage.NiveauObj[posTabY + 1][posTabX+2].colision)&& tempX >= (posTabX + 1)* 50) //si il y a une colision détectée
                     {
-                        posX = (posTabX +1)* 50;
+                        positionX = (posTabX +1)* 50;
                         this.colisionX = etatColision.DROITE;
                         if(this.vitesseY > 0)
                         {
@@ -329,7 +325,7 @@ public class Personnage extends Objet
                     }
                     else // Si aucune colision est trouvée
                     {
-                        posX = tempX;
+                        positionX = tempX;
                         this.colisionX = etatColision.AUCUN;
                         if(this.etat != etatPerso.Dashing && this.etat != etatPerso.Waving && this.etat != etatPerso.WaveDashing && this.etat != etatPerso.WallJumping)
                         {
@@ -345,27 +341,27 @@ public class Personnage extends Objet
                 colisionX = etatColision.AUCUN;
                 etat = etatPerso.InTheAir;
             }
-        this.setLocation(posX,posY);
     }
+
+
 
     private void ColisionY()
     {
-        int tempY = getY()+(int) this.vitesseY;
-        int posX = getX();
-        int posY = getY();
-        int posTabX = posX / 50;
-        int posTabY = posY / 50;
+        int tempY = this.positionY +(int) this.vitesseY;
+        int posTabX = getX() / 50;
+        int temp = getX();
+        int posTabY = this.positionY / 50;
         if(vitesseY > 0) // Test collision bas
         {
             if(posTabX != 0) //att
             {
-                if(posX % 50 == 0) // si le perso est parfaitement alligné à une colonne
+                if(this.positionX % 50 == 0) // si le perso est parfaitement alligné à une colonne
                 {
-                    if(posY % 50 == 0) //Si le perso est alligné a une ligne
+                    if(this.positionY % 50 == 0) //Si le perso est alligné a une ligne
                     {
                         if(Affichage.NiveauObj[posTabY+1][posTabX].colision && tempY >= posTabY * 50) //si il y a une colision détectée
                         {
-                            posY = posTabY * 50;
+                            this.positionY = posTabY * 50;
                             this.colisionY = etatColision.BAS;
                             if(etat != etatPerso.Dashing && etat != etatPerso.Waving)
                             {
@@ -375,7 +371,7 @@ public class Personnage extends Objet
                         }
                         else // Si aucune colision est trouvée
                         {
-                            posY = tempY;
+                            this.positionY = tempY;
                             this.colisionY = etatColision.AUCUN;
                         }
                     }
@@ -383,7 +379,7 @@ public class Personnage extends Objet
                     {
                         if(Affichage.NiveauObj[posTabY+2][posTabX].colision && tempY >= (posTabY +1)* 50) //si il y a une colision détectée
                         {
-                            posY = (posTabY + 1)* 50;
+                            this.positionY = (posTabY + 1)* 50;
                             this.colisionY = etatColision.BAS;
                             if(etat != etatPerso.Dashing && etat != etatPerso.Waving)
                             {
@@ -393,18 +389,18 @@ public class Personnage extends Objet
                         }
                         else // Si aucune colision est trouvée
                         {
-                            posY = tempY;
+                            this.positionY = tempY;
                             this.colisionY = etatColision.AUCUN;
                         }
                     }
                 }
                 else//Si le perso est sur deux lignes
                 {
-                    if(posY % 50 == 0)
+                    if(this.positionY % 50 == 0)
                     {
                         if((Affichage.NiveauObj[posTabY + 1][posTabX].colision || Affichage.NiveauObj[posTabY + 1][posTabX + 1].colision) && tempY >= posTabY * 50) //si il y a une colision détectée
                         {
-                            posY = posTabY * 50;
+                            this.positionY = posTabY * 50;
                             this.colisionY = etatColision.BAS;
                             if(etat != etatPerso.Dashing && etat != etatPerso.Waving)
                             {
@@ -414,7 +410,7 @@ public class Personnage extends Objet
                         }
                         else // Si aucune colision est trouvée
                         {
-                            posY = tempY;
+                            this.positionY = tempY;
                             this.colisionY = etatColision.AUCUN;
                         }
                     }
@@ -422,7 +418,7 @@ public class Personnage extends Objet
                     {
                         if((Affichage.NiveauObj[posTabY + 2][posTabX].colision || Affichage.NiveauObj[posTabY + 2][posTabX + 1].colision) && tempY >= (posTabY + 1) * 50) //si il y a une colision détectée
                         {
-                            posY = (posTabY + 1) * 50;
+                            this.positionY = (posTabY + 1) * 50;
                             this.colisionY = etatColision.BAS;
                             if(etat != etatPerso.Dashing && etat != etatPerso.Waving)
                             {
@@ -432,7 +428,7 @@ public class Personnage extends Objet
                         }
                         else // Si aucune colision est trouvée
                         {
-                            posY = tempY;
+                            this.positionY = tempY;
                             this.colisionY = etatColision.AUCUN;
                         }
                     }
@@ -440,11 +436,11 @@ public class Personnage extends Objet
             }
         } else if (vitesseY < 0)
         {
-            if(posX % 50 == 0)//Si le personnage est alligné a une colonne
+            if(this.positionX % 50 == 0)//Si le personnage est alligné a une colonne
             {
                 if(Affichage.NiveauObj[posTabY-1][posTabX].colision && tempY <= posTabY * 50) //si il y a une colision détectée
                 {
-                    posY = posTabY * 50;
+                    this.positionY = posTabY * 50;
                     if(etat != etatPerso.WallJumping)
                     {
                         this.colisionY = etatColision.HAUT;
@@ -453,7 +449,7 @@ public class Personnage extends Objet
                 }
                 else // Si aucune colision est trouvée
                 {
-                    posY = tempY;
+                    this.positionY = tempY;
                     this.colisionY = etatColision.AUCUN;
                 }
             }
@@ -461,7 +457,7 @@ public class Personnage extends Objet
             {
                 if((Affichage.NiveauObj[posTabY -1 ][posTabX].colision || Affichage.NiveauObj[posTabY -1][posTabX + 1].colision) && tempY <= posTabY * 50) //si il y a une colision détectée
                 {
-                    posY = posTabY * 50;
+                    this.positionY = posTabY * 50;
                     if(etat != etatPerso.WallJumping)
                     {
                         this.colisionY = etatColision.HAUT;
@@ -470,16 +466,16 @@ public class Personnage extends Objet
                 }
                 else // Si aucune colision est trouvée
                 {
-                    posY = tempY;
+                    this.positionY = tempY;
                     this.colisionY = etatColision.AUCUN;
                 }
             }
         }
         else
         {
-            if(posX % 50 == 0) // si le perso est parfaitement alligné à une colonne
+            if(this.positionX % 50 == 0) // si le perso est parfaitement alligné à une colonne
             {
-                if(Affichage.NiveauObj[posTabY+1][posTabX].colision && posY + 1 > posTabY * 50) //si il y a une colision détectée
+                if(Affichage.NiveauObj[posTabY+1][posTabX].colision && this.positionY + 1 > posTabY * 50) //si il y a une colision détectée
                 {
                     this.colisionY = etatColision.BAS;
                     if(etat != etatPerso.Dashing && etat != etatPerso.Waving)
@@ -490,14 +486,14 @@ public class Personnage extends Objet
                 }
                 else
                 {
-                    posY = tempY;
+                    this.positionY = tempY;
                     this.colisionY = etatColision.AUCUN;
                     etat = etatPerso.InTheAir;
                 }
             }
             else//Si le perso est sur deux lignes
             {
-                if((Affichage.NiveauObj[posTabY + 1][posTabX].colision || Affichage.NiveauObj[posTabY + 1][posTabX + 1].colision && posY + 1 >= posTabY * 50)) //si il y a une colision détectée
+                if((Affichage.NiveauObj[posTabY + 1][posTabX].colision || Affichage.NiveauObj[posTabY + 1][posTabX + 1].colision && this.positionY + 1 >= posTabY * 50)) //si il y a une colision détectée
                 {
                     this.colisionY = etatColision.BAS;
                     if(etat != etatPerso.Dashing && etat != etatPerso.Waving)
@@ -508,7 +504,6 @@ public class Personnage extends Objet
                 }
             }
         }
-        setLocation(posX,posY);
     }
     private void Saut()
     {

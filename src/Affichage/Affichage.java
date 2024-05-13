@@ -15,7 +15,8 @@ import com.fasterxml.jackson.databind.*;
 
 public class Affichage extends JPanel implements Runnable
 {
-    public int[][] Niveau = new int[22][39];
+    public static int Offset;
+    public int[][] Niveau = new int[22][78];
     private Personnage perso;
     private static ImageIcon PersoAv,PersoAr,Ciel,Sol;
     private JFrame fenetre = new JFrame("test");
@@ -69,12 +70,11 @@ public class Affichage extends JPanel implements Runnable
         fenetre.setLocation(0,0);
         //Inputs
         int temp = Inputs.GestionInputs(fenetre);
-        perso = new Personnage(PersoAv,1000,400);
+        perso = new Personnage(PersoAv,50,700);
         fenetre.add(perso);
         dernierTemps = System.nanoTime();
         AffichageThread = new Thread(this);
         fenetre.setVisible(true);
-        perso.setLocation(1000,400);
         AffichageThread.start();
     }
 
@@ -83,7 +83,6 @@ public class Affichage extends JPanel implements Runnable
     public void run()
     {
         CreationNiveau();
-        perso.setLocation(50,700);
         while (AffichageThread!= null)
         {
             long maintenant = System.nanoTime();
@@ -140,11 +139,29 @@ public class Affichage extends JPanel implements Runnable
 
     void AffichageNiveau()
     {
+        Offset = 0;
+        if(perso.positionX > 985)
+        {
+            Offset = perso.positionX - 985;
+        }
+        perso.setLocation(perso.positionX-Offset,perso.positionY);
+        int OffestTab = Offset / 50;
+        Offset %= 50;
         for(int idx = 0;idx <= 21;idx++)
         {
             for(int idx1 = 0;idx1<= 38;idx1++)
             {
-                NiveauObj[idx][idx1].setLocation(50*idx1,50*idx);
+                if(Niveau[idx][idx1 + OffestTab] == 1)
+                {
+                    NiveauObj[idx][idx1].setIcon(Sol);
+                    NiveauObj[idx][idx1].colision = true;
+                }
+                else
+                {
+                    NiveauObj[idx][idx1].setIcon(Ciel);
+                    NiveauObj[idx][idx1].colision = false;
+                }
+                NiveauObj[idx][idx1].setLocation((50*idx1) - Offset,50*idx );
             }
         }
     }
