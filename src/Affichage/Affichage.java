@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.*;
 
 public class Affichage extends JPanel implements Runnable
 {
-    public static int Offset;
+    public static int OffsetTotal;
     public int[][] Niveau = new int[22][78];
     private Personnage perso;
     private static ImageIcon PersoAv,PersoAr,Ciel,Sol;
@@ -89,6 +89,7 @@ public class Affichage extends JPanel implements Runnable
             double deltaTemps = (maintenant - dernierTemps) / 1_000_000.0; // Convertir en mili secondes
             if(deltaTemps >= 16.6d)
             {
+                fenetre.setIgnoreRepaint(true);
                 perso.Update();
                 AffichageNiveau();
                 fenetre.repaint();
@@ -100,8 +101,6 @@ public class Affichage extends JPanel implements Runnable
                     perso.setIcon(PersoAr);
                 }
                 dernierTemps = maintenant;
-                Component[] components = fenetre.getContentPane().getComponents();
-                int a = 0;
                 perso.setSize(50,50);
             }
         }
@@ -139,11 +138,20 @@ public class Affichage extends JPanel implements Runnable
 
     void AffichageNiveau()
     {
-        Offset = 0;
+        int Offset = 0;
+        if(perso.positionX > 985)
+        {
+            OffsetTotal = perso.positionX - 935;
+        }
+        else
+        {
+            OffsetTotal = 0;
+        }
         if(perso.positionX > 985)
         {
             Offset = perso.positionX - 985;
         }
+
         perso.setLocation(perso.positionX-Offset,perso.positionY);
         int OffestTab = Offset / 50;
         Offset %= 50;

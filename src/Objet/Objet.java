@@ -16,5 +16,6 @@ public class Objet extends JLabel
         positionY = posY;
         super.setSize(50,50);
         this.colision = Colision;
+        this.setIgnoreRepaint(true);
     }
 }
